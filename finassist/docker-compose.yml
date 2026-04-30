@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: finassist-api
+    container_name: finassist-api
+    environment:
+      FINASSIST_DB_PATH: /data/finassist.db
+      FINASSIST_CORS_ORIGINS: '["http://127.0.0.1:5173","http://127.0.0.1:8080"]'
+    volumes:
+      - finassist-data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    image: finassist-web
+    container_name: finassist-web
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:8080:80"
+
+volumes:
+  finassist-data:

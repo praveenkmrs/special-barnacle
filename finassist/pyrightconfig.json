@@ -1,0 +1,7 @@
+{
+  "include": ["api", "core", "db", "tests"],
+  "extraPaths": ["."],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.14"
+}
